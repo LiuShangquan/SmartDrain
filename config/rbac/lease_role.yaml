@@ -1,0 +1,23 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: smartdrain-lease-role
+  namespace: smartdrain-system
+rules:
+  - apiGroups: [coordination.k8s.io]
+    resources: [leases]
+    verbs: [get, list, watch, create, update, patch]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: smartdrain-lease-rolebinding
+  namespace: smartdrain-system
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: smartdrain-lease-role
+subjects:
+  - kind: ServiceAccount
+    name: smartdrain-controller-manager
+    namespace: smartdrain-system

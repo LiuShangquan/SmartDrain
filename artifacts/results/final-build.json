@@ -1,0 +1,41 @@
+{
+  "CapturedAt": "2026-11-19T19:58:33.6882248+08:00",
+  "Go": "go version go1.26.5 windows/amd64",
+  "Kind": "kind v0.33.0 go1.26.7 windows/amd64",
+  "Kubernetes": {
+    "clientVersion": {
+      "major": "1",
+      "minor": "35",
+      "gitVersion": "v1.35.0",
+      "gitCommit": "66452049f3d692768c39c797b21b793dce80314e",
+      "gitTreeState": "clean",
+      "buildDate": "2025-12-17T12:41:05Z",
+      "goVersion": "go1.25.5",
+      "compiler": "gc",
+      "platform": "windows/amd64"
+    },
+    "kustomizeVersion": "v5.7.1",
+    "serverVersion": {
+      "major": "1",
+      "minor": "35",
+      "emulationMajor": "1",
+      "emulationMinor": "35",
+      "minCompatibilityMajor": "1",
+      "minCompatibilityMinor": "34",
+      "gitVersion": "v1.35.0",
+      "gitCommit": "66452049f3d692768c39c797b21b793dce80314e",
+      "gitTreeState": "clean",
+      "buildDate": "2025-12-17T12:32:07Z",
+      "goVersion": "go1.25.5",
+      "compiler": "gc",
+      "platform": "linux/amd64"
+    }
+  },
+  "ManagerImage": "sha256:a18bf6e36ff249c5398fdfb0238ce27f9ffbbf7a95e6105d34f7cc3143e29e97",
+  "TestAppImage": "sha256:9093eead73790ff06b39df432f1445ed0879826a8ac01bbc2c8fbaa23f2eecef",
+  "ManagerBinarySHA256": "df13ea6fd8c9c530b4f377c835c640bd0c3801ace4299f0fa949eaad5f00fed4",
+  "TestAppBinarySHA256": "82b2a112f2b934f09b38934edfe9dfe060f726ea92d3df6c8c7b483d27c349be",
+  "CRDSHA256": "97380856171adfa11713332f583356859039ad5e580429afafebdd8296e9134b",
+  "SourceManifestSHA256": "ff0928c4a7126a908ea3f0e93d3bafd503ee92f97d558f957977542a19ca4d37",
+  "NativeKubectlSHA256": "4c5d14b8673bd55f813a8965ad70d5150e3960ee5f274025e2286aea3a0fa8b6"
+}

@@ -1,0 +1,9 @@
+/bin/
+/dist/
+/_work/
+/artifacts/runs/
+*.test
+*.exe
+coverage.out
+.env
+*.kubeconfig

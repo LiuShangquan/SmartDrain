@@ -1,0 +1,147 @@
+{
+  "Kind": "kind v0.33.0 go1.26.7 windows/amd64",
+  "ManagerImage": "sha256:8d06e8ce802e43991b2d305104b374394e4b1d936c1e5e6789163abeae97a5d6",
+  "Kubernetes": {
+    "clientVersion": {
+      "major": "1",
+      "minor": "35",
+      "gitVersion": "v1.35.0",
+      "gitCommit": "66452049f3d692768c39c797b21b793dce80314e",
+      "gitTreeState": "clean",
+      "buildDate": "2025-12-17T12:41:05Z",
+      "goVersion": "go1.25.5",
+      "compiler": "gc",
+      "platform": "windows/amd64"
+    },
+    "kustomizeVersion": "v5.7.1",
+    "serverVersion": {
+      "major": "1",
+      "minor": "35",
+      "emulationMajor": "1",
+      "emulationMinor": "35",
+      "minCompatibilityMajor": "1",
+      "minCompatibilityMinor": "34",
+      "gitVersion": "v1.35.0",
+      "gitCommit": "66452049f3d692768c39c797b21b793dce80314e",
+      "gitTreeState": "clean",
+      "buildDate": "2025-12-17T12:32:07Z",
+      "goVersion": "go1.25.5",
+      "compiler": "gc",
+      "platform": "linux/amd64"
+    }
+  },
+  "TestAppImage": "sha256:db0a70ca10a028e04f0012e1858dd01b47c63a457b7dcdff4885a6bd37f40776",
+  "NativeKubectlSha256": "4c5d14b8673bd55f813a8965ad70d5150e3960ee5f274025e2286aea3a0fa8b6",
+  "Nodes": [
+    {
+      "UID": "758d9acc-139f-4800-a3c2-4a9d9c7eab55",
+      "Allocatable": {
+        "cpu": "32",
+        "ephemeral-storage": "1055762868Ki",
+        "hugepages-1Gi": "0",
+        "hugepages-2Mi": "0",
+        "memory": "16219860Ki",
+        "pods": "110"
+      },
+      "NodeInfo": {
+        "architecture": "amd64",
+        "bootID": "87f41951-8de4-4a45-aeb6-10ad0dccfbab",
+        "containerRuntimeVersion": "containerd://2.2.0",
+        "kernelVersion": "6.18.33.2-microsoft-standard-WSL2",
+        "kubeProxyVersion": "",
+        "kubeletVersion": "v1.35.0",
+        "machineID": "97845f02792c4684ae7960156009ee87",
+        "operatingSystem": "linux",
+        "osImage": "Debian GNU/Linux 12 (bookworm)",
+        "swap": {
+          "capacity": 4294967296
+        },
+        "systemUUID": "97845f02792c4684ae7960156009ee87"
+      },
+      "Name": "smartdrain-dev-control-plane"
+    },
+    {
+      "UID": "d4f24064-d915-4770-8129-392e6260b537",
+      "Allocatable": {
+        "cpu": "32",
+        "ephemeral-storage": "1055762868Ki",
+        "hugepages-1Gi": "0",
+        "hugepages-2Mi": "0",
+        "memory": "16219860Ki",
+        "pods": "110"
+      },
+      "NodeInfo": {
+        "architecture": "amd64",
+        "bootID": "87f41951-8de4-4a45-aeb6-10ad0dccfbab",
+        "containerRuntimeVersion": "containerd://2.2.0",
+        "kernelVersion": "6.18.33.2-microsoft-standard-WSL2",
+        "kubeProxyVersion": "",
+        "kubeletVersion": "v1.35.0",
+        "machineID": "05c79b6d7c5742449e8c4bfb61c3b579",
+        "operatingSystem": "linux",
+        "osImage": "Debian GNU/Linux 12 (bookworm)",
+        "swap": {
+          "capacity": 4294967296
+        },
+        "systemUUID": "05c79b6d7c5742449e8c4bfb61c3b579"
+      },
+      "Name": "smartdrain-dev-worker"
+    },
+    {
+      "UID": "ef270d22-9958-4644-a723-447b1d54fc1a",
+      "Allocatable": {
+        "cpu": "32",
+        "ephemeral-storage": "1055762868Ki",
+        "hugepages-1Gi": "0",
+        "hugepages-2Mi": "0",
+        "memory": "16219860Ki",
+        "pods": "110"
+      },
+      "NodeInfo": {
+        "architecture": "amd64",
+        "bootID": "87f41951-8de4-4a45-aeb6-10ad0dccfbab",
+        "containerRuntimeVersion": "containerd://2.2.0",
+        "kernelVersion": "6.18.33.2-microsoft-standard-WSL2",
+        "kubeProxyVersion": "",
+        "kubeletVersion": "v1.35.0",
+        "machineID": "c352643d0db74563a69721d86095b3c0",
+        "operatingSystem": "linux",
+        "osImage": "Debian GNU/Linux 12 (bookworm)",
+        "swap": {
+          "capacity": 4294967296
+        },
+        "systemUUID": "c352643d0db74563a69721d86095b3c0"
+      },
+      "Name": "smartdrain-dev-worker2"
+    },
+    {
+      "UID": "f6da63d1-403a-4af7-9d08-539f41b1012a",
+      "Allocatable": {
+        "cpu": "32",
+        "ephemeral-storage": "1055762868Ki",
+        "hugepages-1Gi": "0",
+        "hugepages-2Mi": "0",
+        "memory": "16219860Ki",
+        "pods": "110"
+      },
+      "NodeInfo": {
+        "architecture": "amd64",
+        "bootID": "87f41951-8de4-4a45-aeb6-10ad0dccfbab",
+        "containerRuntimeVersion": "containerd://2.2.0",
+        "kernelVersion": "6.18.33.2-microsoft-standard-WSL2",
+        "kubeProxyVersion": "",
+        "kubeletVersion": "v1.35.0",
+        "machineID": "dbb7d933e62c4ac29f706afff3389d34",
+        "operatingSystem": "linux",
+        "osImage": "Debian GNU/Linux 12 (bookworm)",
+        "swap": {
+          "capacity": 4294967296
+        },
+        "systemUUID": "dbb7d933e62c4ac29f706afff3389d34"
+      },
+      "Name": "smartdrain-dev-worker3"
+    }
+  ],
+  "RecordedAt": "2026-11-19T11:42:08.0134331Z",
+  "Go": "go version go1.26.5 windows/amd64"
+}

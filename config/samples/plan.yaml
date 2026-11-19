@@ -1,0 +1,10 @@
+apiVersion: maintenance.example.com/v1alpha1
+kind: NodeMaintenance
+metadata:
+  name: plan-worker
+spec:
+  nodeName: smartdrain-dev-worker
+  mode: PlanOnly
+  executionPolicy: Guarded
+  drain:
+    ignoreDaemonSets: true

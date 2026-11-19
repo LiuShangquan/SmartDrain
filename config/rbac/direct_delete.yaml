@@ -1,0 +1,22 @@
+# 仅在需要显式兼容 Delete 时安装，并同时设置 manager --allow-direct-delete。
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: smartdrain-direct-delete
+rules:
+  - apiGroups: [""]
+    resources: [pods]
+    verbs: [delete]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: smartdrain-direct-delete
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: smartdrain-direct-delete
+subjects:
+  - kind: ServiceAccount
+    name: smartdrain-controller-manager
+    namespace: smartdrain-system

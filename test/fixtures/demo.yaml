@@ -1,0 +1,51 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: smartdrain-demo
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web
+  namespace: smartdrain-demo
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: web
+  template:
+    metadata:
+      labels:
+        app: web
+    spec:
+      terminationGracePeriodSeconds: 3
+      containers:
+        - name: web
+          image: smartdrain-testapp:dev
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: READY_DELAY_SECONDS
+              value: "4"
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 8080
+            periodSeconds: 1
+          resources:
+            requests:
+              cpu: 100m
+              memory: 32Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: web
+  namespace: smartdrain-demo
+spec:
+  selector:
+    app: web
+  ports:
+    - port: 8080
+      targetPort: 8080

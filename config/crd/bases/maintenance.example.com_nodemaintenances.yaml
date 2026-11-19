@@ -1,0 +1,637 @@
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.20.0
+  name: nodemaintenances.maintenance.example.com
+spec:
+  group: maintenance.example.com
+  names:
+    kind: NodeMaintenance
+    listKind: NodeMaintenanceList
+    plural: nodemaintenances
+    shortNames:
+    - nm
+    singular: nodemaintenance
+  scope: Cluster
+  versions:
+  - additionalPrinterColumns:
+    - jsonPath: .spec.nodeName
+      name: Node
+      type: string
+    - jsonPath: .spec.executionPolicy
+      name: Policy
+      type: string
+    - jsonPath: .status.phase
+      name: Phase
+      type: string
+    - jsonPath: .status.conditions[?(@.type=="MaintenanceReady")].status
+      name: Ready
+      type: string
+    - jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: NodeMaintenanceSpec 描述维护意图，执行语义创建后不可变。
+            properties:
+              desiredState:
+                default: Maintenance
+                enum:
+                - Maintenance
+                - Restored
+                type: string
+                x-kubernetes-validations:
+                - message: Restored is terminal intent
+                  rule: oldSelf != 'Restored' || self == 'Restored'
+              drain:
+                default:
+                  chunkSize: 500
+                  deleteEmptyDirData: false
+                  disableEviction: false
+                  dryRun: Client
+                  force: false
+                  gracePeriodSeconds: -1
+                  ignoreDaemonSets: false
+                  podSelector: ""
+                  skipWaitForDeleteTimeoutSeconds: 0
+                description: DrainOptions 将原生 drain 的显式行为保留为任务契约。
+                properties:
+                  chunkSize:
+                    default: 500
+                    format: int64
+                    minimum: 0
+                    type: integer
+                  deleteEmptyDirData:
+                    default: false
+                    type: boolean
+                  disableEviction:
+                    default: false
+                    type: boolean
+                  dryRun:
+                    default: Client
+                    enum:
+                    - Client
+                    - Server
+                    type: string
+                  force:
+                    default: false
+                    type: boolean
+                  gracePeriodSeconds:
+                    default: -1
+                    format: int64
+                    minimum: -1
+                    type: integer
+                  ignoreDaemonSets:
+                    default: false
+                    type: boolean
+                  podSelector:
+                    default: ""
+                    maxLength: 1024
+                    type: string
+                  skipWaitForDeleteTimeoutSeconds:
+                    default: 0
+                    format: int64
+                    minimum: 0
+                    type: integer
+                type: object
+                x-kubernetes-validations:
+                - message: drain options are immutable
+                  rule: self == oldSelf
+              executionPolicy:
+                default: Guarded
+                enum:
+                - Guarded
+                - DrainCompatible
+                type: string
+                x-kubernetes-validations:
+                - message: executionPolicy is immutable
+                  rule: self == oldSelf
+              jobPolicy:
+                default: Default
+                enum:
+                - Default
+                - Wait
+                - Evict
+                type: string
+                x-kubernetes-validations:
+                - message: jobPolicy is immutable
+                  rule: self == oldSelf
+              mode:
+                default: Execute
+                enum:
+                - Execute
+                - PlanOnly
+                type: string
+                x-kubernetes-validations:
+                - message: mode is immutable
+                  rule: self == oldSelf
+              nodeName:
+                maxLength: 253
+                minLength: 1
+                type: string
+                x-kubernetes-validations:
+                - message: nodeName is immutable
+                  rule: self == oldSelf
+              paused:
+                type: boolean
+              reason:
+                maxLength: 1024
+                type: string
+              timeoutSeconds:
+                default: 1800
+                format: int64
+                maximum: 604800
+                minimum: 0
+                type: integer
+                x-kubernetes-validations:
+                - message: timeoutSeconds is immutable
+                  rule: self == oldSelf
+            required:
+            - nodeName
+            type: object
+            x-kubernetes-validations:
+            - message: Guarded does not allow bypass or partial-drain options
+              rule: self.executionPolicy != 'Guarded' || (!self.drain.disableEviction
+                && self.drain.skipWaitForDeleteTimeoutSeconds == 0 && size(self.drain.podSelector)
+                == 0)
+          status:
+            properties:
+              baselineCaptured:
+                type: boolean
+              baselines:
+                items:
+                  description: WorkloadBaseline 冻结增强恢复谓词所依赖的规格。
+                  properties:
+                    desired:
+                      format: int32
+                      type: integer
+                    generation:
+                      format: int64
+                      type: integer
+                    kind:
+                      type: string
+                    minReadySeconds:
+                      format: int32
+                      type: integer
+                    name:
+                      type: string
+                    namespace:
+                      type: string
+                    replicaSetUID:
+                      description: |-
+                        UID is a type that holds unique ID values, including UUIDs.  Because we
+                        don't ONLY use UUIDs, this is an alias to string.  Being a type captures
+                        intent and helps make sure that UIDs and names do not get conflated.
+                      type: string
+                    revision:
+                      type: string
+                    startOrdinal:
+                      format: int32
+                      type: integer
+                    templateHash:
+                      type: string
+                    uid:
+                      description: |-
+                        UID is a type that holds unique ID values, including UUIDs.  Because we
+                        don't ONLY use UUIDs, this is an alias to string.  Being a type captures
+                        intent and helps make sure that UIDs and names do not get conflated.
+                      type: string
+                  required:
+                  - desired
+                  - generation
+                  - name
+                  - templateHash
+                  - uid
+                  type: object
+                maxItems: 256
+                type: array
+              cleanupResult:
+                type: string
+              completedOperations:
+                format: int32
+                type: integer
+              compute:
+                description: CheckReport 区分有见证的可行、可证明阻塞和未知。
+                properties:
+                  message:
+                    type: string
+                  placements:
+                    additionalProperties:
+                      type: string
+                    type: object
+                  reason:
+                    type: string
+                  result:
+                    type: string
+                required:
+                - reason
+                - result
+                type: object
+              conditions:
+                items:
+                  description: Condition contains details for one aspect of the current
+                    state of this API Resource.
+                  properties:
+                    lastTransitionTime:
+                      description: |-
+                        lastTransitionTime is the last time the condition transitioned from one status to another.
+                        This should be when the underlying condition changed.  If that is not known, then using the time when the API field changed is acceptable.
+                      format: date-time
+                      type: string
+                    message:
+                      description: |-
+                        message is a human readable message indicating details about the transition.
+                        This may be an empty string.
+                      maxLength: 32768
+                      type: string
+                    observedGeneration:
+                      description: |-
+                        observedGeneration represents the .metadata.generation that the condition was set based upon.
+                        For instance, if .metadata.generation is currently 12, but the .status.conditions[x].observedGeneration is 9, the condition is out of date
+                        with respect to the current state of the instance.
+                      format: int64
+                      minimum: 0
+                      type: integer
+                    reason:
+                      description: |-
+                        reason contains a programmatic identifier indicating the reason for the condition's last transition.
+                        Producers of specific condition types may define expected values and meanings for this field,
+                        and whether the values are considered a guaranteed API.
+                        The value should be a CamelCase string.
+                        This field may not be empty.
+                      maxLength: 1024
+                      minLength: 1
+                      pattern: ^[A-Za-z]([A-Za-z0-9_,:]*[A-Za-z0-9_])?$
+                      type: string
+                    status:
+                      description: status of the condition, one of True, False, Unknown.
+                      enum:
+                      - "True"
+                      - "False"
+                      - Unknown
+                      type: string
+                    type:
+                      description: type of condition in CamelCase or in foo.example.com/CamelCase.
+                      maxLength: 316
+                      pattern: ^([a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*/)?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$
+                      type: string
+                  required:
+                  - lastTransitionTime
+                  - message
+                  - reason
+                  - status
+                  - type
+                  type: object
+                type: array
+                x-kubernetes-list-map-keys:
+                - type
+                x-kubernetes-list-type: map
+              currentOperation:
+                description: Operation 是单个删除副作用的持久日志，不承诺恰好一次执行。
+                properties:
+                  accepted:
+                    type: boolean
+                  action:
+                    type: string
+                  attempts:
+                    format: int32
+                    type: integer
+                  id:
+                    type: string
+                  kind:
+                    type: string
+                  lastReason:
+                    type: string
+                  name:
+                    type: string
+                  namespace:
+                    type: string
+                  ordinal:
+                    format: int32
+                    type: integer
+                  ownerUID:
+                    description: |-
+                      UID is a type that holds unique ID values, including UUIDs.  Because we
+                      don't ONLY use UUIDs, this is an alias to string.  Being a type captures
+                      intent and helps make sure that UIDs and names do not get conflated.
+                    type: string
+                  recoveryKind:
+                    type: string
+                  retryAfter:
+                    format: date-time
+                    type: string
+                  state:
+                    type: string
+                  uid:
+                    description: |-
+                      UID is a type that holds unique ID values, including UUIDs.  Because we
+                      don't ONLY use UUIDs, this is an alias to string.  Being a type captures
+                      intent and helps make sure that UIDs and names do not get conflated.
+                    type: string
+                  unresolvedUnknown:
+                    type: boolean
+                  volumes:
+                    items:
+                      description: VolumeIdentity 保存需要重验的 PVC/PV 绑定和后端身份。
+                      properties:
+                        pv:
+                          description: ObjectIdentity 通过 UID 区分同名对象。
+                          properties:
+                            kind:
+                              type: string
+                            name:
+                              type: string
+                            namespace:
+                              type: string
+                            uid:
+                              description: |-
+                                UID is a type that holds unique ID values, including UUIDs.  Because we
+                                don't ONLY use UUIDs, this is an alias to string.  Being a type captures
+                                intent and helps make sure that UIDs and names do not get conflated.
+                              type: string
+                          required:
+                          - name
+                          - uid
+                          type: object
+                        pvc:
+                          description: ObjectIdentity 通过 UID 区分同名对象。
+                          properties:
+                            kind:
+                              type: string
+                            name:
+                              type: string
+                            namespace:
+                              type: string
+                            uid:
+                              description: |-
+                                UID is a type that holds unique ID values, including UUIDs.  Because we
+                                don't ONLY use UUIDs, this is an alias to string.  Being a type captures
+                                intent and helps make sure that UIDs and names do not get conflated.
+                              type: string
+                          required:
+                          - name
+                          - uid
+                          type: object
+                        sourceHash:
+                          type: string
+                      required:
+                      - pv
+                      - pvc
+                      - sourceHash
+                      type: object
+                    type: array
+                required:
+                - action
+                - id
+                - name
+                - state
+                - uid
+                type: object
+              deadline:
+                format: date-time
+                type: string
+              jobObservations:
+                items:
+                  description: JobObservation 记录本节点曾观察到的实例结果，不推断 Job 的业务成功。
+                  properties:
+                    kind:
+                      type: string
+                    name:
+                      type: string
+                    namespace:
+                      type: string
+                    outcome:
+                      type: string
+                    uid:
+                      description: |-
+                        UID is a type that holds unique ID values, including UUIDs.  Because we
+                        don't ONLY use UUIDs, this is an alias to string.  Being a type captures
+                        intent and helps make sure that UIDs and names do not get conflated.
+                      type: string
+                  required:
+                  - name
+                  - outcome
+                  - uid
+                  type: object
+                maxItems: 256
+                type: array
+              jobPolicy:
+                type: string
+              nodeClaimResourceVersion:
+                type: string
+              nodeClaimStarted:
+                type: boolean
+              nodeClaimed:
+                type: boolean
+              nodeCleanupConfirmed:
+                type: boolean
+              nodeUID:
+                description: |-
+                  UID is a type that holds unique ID values, including UUIDs.  Because we
+                  don't ONLY use UUIDs, this is an alias to string.  Being a type captures
+                  intent and helps make sure that UIDs and names do not get conflated.
+                type: string
+              observedGeneration:
+                format: int64
+                type: integer
+              pendingCleanup:
+                items:
+                  description: Operation 是单个删除副作用的持久日志，不承诺恰好一次执行。
+                  properties:
+                    accepted:
+                      type: boolean
+                    action:
+                      type: string
+                    attempts:
+                      format: int32
+                      type: integer
+                    id:
+                      type: string
+                    kind:
+                      type: string
+                    lastReason:
+                      type: string
+                    name:
+                      type: string
+                    namespace:
+                      type: string
+                    ordinal:
+                      format: int32
+                      type: integer
+                    ownerUID:
+                      description: |-
+                        UID is a type that holds unique ID values, including UUIDs.  Because we
+                        don't ONLY use UUIDs, this is an alias to string.  Being a type captures
+                        intent and helps make sure that UIDs and names do not get conflated.
+                      type: string
+                    recoveryKind:
+                      type: string
+                    retryAfter:
+                      format: date-time
+                      type: string
+                    state:
+                      type: string
+                    uid:
+                      description: |-
+                        UID is a type that holds unique ID values, including UUIDs.  Because we
+                        don't ONLY use UUIDs, this is an alias to string.  Being a type captures
+                        intent and helps make sure that UIDs and names do not get conflated.
+                      type: string
+                    unresolvedUnknown:
+                      type: boolean
+                    volumes:
+                      items:
+                        description: VolumeIdentity 保存需要重验的 PVC/PV 绑定和后端身份。
+                        properties:
+                          pv:
+                            description: ObjectIdentity 通过 UID 区分同名对象。
+                            properties:
+                              kind:
+                                type: string
+                              name:
+                                type: string
+                              namespace:
+                                type: string
+                              uid:
+                                description: |-
+                                  UID is a type that holds unique ID values, including UUIDs.  Because we
+                                  don't ONLY use UUIDs, this is an alias to string.  Being a type captures
+                                  intent and helps make sure that UIDs and names do not get conflated.
+                                type: string
+                            required:
+                            - name
+                            - uid
+                            type: object
+                          pvc:
+                            description: ObjectIdentity 通过 UID 区分同名对象。
+                            properties:
+                              kind:
+                                type: string
+                              name:
+                                type: string
+                              namespace:
+                                type: string
+                              uid:
+                                description: |-
+                                  UID is a type that holds unique ID values, including UUIDs.  Because we
+                                  don't ONLY use UUIDs, this is an alias to string.  Being a type captures
+                                  intent and helps make sure that UIDs and names do not get conflated.
+                                type: string
+                            required:
+                            - name
+                            - uid
+                            type: object
+                          sourceHash:
+                            type: string
+                        required:
+                        - pv
+                        - pvc
+                        - sourceHash
+                        type: object
+                      type: array
+                  required:
+                  - action
+                  - id
+                  - name
+                  - state
+                  - uid
+                  type: object
+                maxItems: 256
+                type: array
+              phase:
+                type: string
+              pods:
+                items:
+                  description: PodReport 保存当前分类而非无界审计历史。
+                  properties:
+                    action:
+                      type: string
+                    kind:
+                      type: string
+                    name:
+                      type: string
+                    namespace:
+                      type: string
+                    reason:
+                      type: string
+                    uid:
+                      description: |-
+                        UID is a type that holds unique ID values, including UUIDs.  Because we
+                        don't ONLY use UUIDs, this is an alias to string.  Being a type captures
+                        intent and helps make sure that UIDs and names do not get conflated.
+                      type: string
+                  required:
+                  - action
+                  - name
+                  - reason
+                  - uid
+                  type: object
+                maxItems: 256
+                type: array
+              recovery:
+                description: CheckReport 区分有见证的可行、可证明阻塞和未知。
+                properties:
+                  message:
+                    type: string
+                  placements:
+                    additionalProperties:
+                      type: string
+                    type: object
+                  reason:
+                    type: string
+                  result:
+                    type: string
+                required:
+                - reason
+                - result
+                type: object
+              startedAt:
+                format: date-time
+                type: string
+              storage:
+                description: CheckReport 区分有见证的可行、可证明阻塞和未知。
+                properties:
+                  message:
+                    type: string
+                  placements:
+                    additionalProperties:
+                      type: string
+                    type: object
+                  reason:
+                    type: string
+                  result:
+                    type: string
+                required:
+                - reason
+                - result
+                type: object
+            type: object
+        required:
+        - spec
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}

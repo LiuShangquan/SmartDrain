@@ -1,0 +1,87 @@
+{
+  "capturedAt": "2026-11-19T20:00:38.775413+08:00",
+  "nodes": [
+    {
+      "name": "smartdrain-dev-control-plane",
+      "uid": "758d9acc-139f-4800-a3c2-4a9d9c7eab55",
+      "ready": true,
+      "unschedulable": false,
+      "claim": null,
+      "allocatable": {
+        "cpu": "32",
+        "ephemeral-storage": "1055762868Ki",
+        "hugepages-1Gi": "0",
+        "hugepages-2Mi": "0",
+        "memory": "16219860Ki",
+        "pods": "110"
+      }
+    },
+    {
+      "name": "smartdrain-dev-worker",
+      "uid": "d4f24064-d915-4770-8129-392e6260b537",
+      "ready": true,
+      "unschedulable": false,
+      "claim": null,
+      "allocatable": {
+        "cpu": "32",
+        "ephemeral-storage": "1055762868Ki",
+        "hugepages-1Gi": "0",
+        "hugepages-2Mi": "0",
+        "memory": "16219860Ki",
+        "pods": "110"
+      }
+    },
+    {
+      "name": "smartdrain-dev-worker2",
+      "uid": "ef270d22-9958-4644-a723-447b1d54fc1a",
+      "ready": true,
+      "unschedulable": false,
+      "claim": null,
+      "allocatable": {
+        "cpu": "32",
+        "ephemeral-storage": "1055762868Ki",
+        "hugepages-1Gi": "0",
+        "hugepages-2Mi": "0",
+        "memory": "16219860Ki",
+        "pods": "110"
+      }
+    },
+    {
+      "name": "smartdrain-dev-worker3",
+      "uid": "f6da63d1-403a-4af7-9d08-539f41b1012a",
+      "ready": true,
+      "unschedulable": false,
+      "claim": null,
+      "allocatable": {
+        "cpu": "32",
+        "ephemeral-storage": "1055762868Ki",
+        "hugepages-1Gi": "0",
+        "hugepages-2Mi": "0",
+        "memory": "16219860Ki",
+        "pods": "110"
+      }
+    }
+  ],
+  "remainingTasks": 0,
+  "taskSlotHolder": "",
+  "managerReadyReplicas": 1,
+  "managerArguments": [
+    "--leader-elect=true"
+  ],
+  "managerPods": [
+    {
+      "name": "smartdrain-controller-manager-ddc86c584-rwxql",
+      "uid": "602cf1bc-71f8-4cf5-aea7-1ae9b2754e25",
+      "imageIDs": [
+        "sha256:10270e788efa22e84582c5e58dee55cf898786954e16cc6ef2a33511c3140a03"
+      ]
+    }
+  ],
+  "defaultPodDeleteAllowed": false,
+  "optionalDeleteBindingPresent": false,
+  "remainingTestNamespaces": [],
+  "remainingPVs": 0,
+  "staticFixturePresent": false,
+  "nfsServerRunning": true,
+  "nfsServerAddress": "172.19.0.10"
+}
